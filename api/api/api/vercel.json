@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
+```
+
+4. **`Commit changes...`** 클릭
+
+5. **`Commit changes`** 클릭
+
+---
+
+## ✅ 완료 확인!
+
+이제 저장소에 이런 파일들이 있어야 합니다:
+```
+📄 README.md
+📄 index.html
+📄 vercel.json
+📁 api/
+  📄 token.js
+  📄 account.js
+  📄 price.js
