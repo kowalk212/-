@@ -2,489 +2,319 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="한투 자동매매">
-    <meta name="theme-color" content="#0f172a">
-    <title>한국투자증권 자동매매</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon.png">
+    <title>한투 자동매매 Pro</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overscroll-behavior: none; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%); min-height: 100vh; color: white; padding-bottom: env(safe-area-inset-bottom); }
-        .container { max-width: 1200px; margin: 0 auto; padding: 16px; }
-        .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 16px; padding: 16px; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 16px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 12px; }
-        .title { font-size: 20px; font-weight: bold; }
-        .subtitle { font-size: 12px; color: rgba(147,197,253,1); margin-top: 4px; }
-        .badge { padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px; }
-        .badge-green { background: rgba(34,197,94,0.2); color: rgb(134,239,172); }
-        .badge-red { background: rgba(239,68,68,0.2); color: rgb(252,165,165); }
-        .badge-blue { background: rgba(59,130,246,0.2); color: rgb(147,197,253); }
-        .badge-purple { background: rgba(168,85,247,0.2); color: rgb(216,180,254); }
-        .btn { padding: 10px 20px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; font-size: 13px; transition: all 0.3s; }
-        .btn-primary { background: rgb(59,130,246); color: white; }
-        .btn-success { background: rgb(34,197,94); color: white; }
-        .btn-danger { background: rgb(239,68,68); color: white; }
-        .btn-gray { background: rgb(107,114,128); color: white; cursor: not-allowed; opacity: 0.6; }
-        .btn:not(.btn-gray):active { transform: scale(0.95); }
-        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .stat-card { padding: 16px; border-radius: 12px; color: white; }
-        .stat-label { font-size: 11px; opacity: 0.9; margin-bottom: 4px; }
-        .stat-value { font-size: 18px; font-weight: bold; word-break: break-all; }
-        .stat-sub { font-size: 11px; opacity: 0.9; margin-top: 4px; }
-        .bg-blue { background: linear-gradient(135deg, rgb(59,130,246), rgb(37,99,235)); }
-        .bg-purple { background: linear-gradient(135deg, rgb(168,85,247), rgb(126,34,206)); }
-        .bg-green { background: linear-gradient(135deg, rgb(34,197,94), rgb(22,163,74)); }
-        .bg-red { background: linear-gradient(135deg, rgb(239,68,68), rgb(220,38,38)); }
-        .bg-orange { background: linear-gradient(135deg, rgb(249,115,22), rgb(234,88,12)); }
-        .list { max-height: 300px; overflow-y: auto; }
-        .list-item { padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
-        .log { font-family: 'Courier New', monospace; font-size: 11px; padding: 8px; border-radius: 4px; margin-bottom: 4px; word-break: break-all; }
-        .log-info { background: rgba(0,0,0,0.2); color: rgb(134,239,172); }
-        .log-success { background: rgba(34,197,94,0.2); color: rgb(134,239,172); }
-        .log-error { background: rgba(239,68,68,0.2); color: rgb(252,165,165); }
-        .log-trade { background: rgba(59,130,246,0.2); color: rgb(147,197,253); }
-        .notification { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgb(34,197,94); color: white; padding: 16px 24px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 1000; font-weight: bold; animation: slideDown 0.5s ease; max-width: 90%; text-align: center; }
-        @keyframes slideDown { from { transform: translateX(-50%) translateY(-100px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
-        select, input { width: 100%; padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white; font-size: 14px; }
-        select option { background: #1e293b; color: white; }
-        .controls { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-        .empty-state { text-align: center; padding: 40px 20px; color: rgba(147,197,253,1); font-size: 14px; }
-        @media (max-width: 640px) {
-            .stat-value { font-size: 16px; }
-            .title { font-size: 18px; }
-            .btn { padding: 8px 16px; font-size: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, sans-serif; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%); 
+            min-height: 100vh; 
+            color: white; 
+            padding: 20px;
         }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .card { 
+            background: rgba(255,255,255,0.1); 
+            backdrop-filter: blur(10px); 
+            border-radius: 16px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .title { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+        .badge { 
+            display: inline-block; 
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            font-weight: bold; 
+            margin: 5px;
+        }
+        .badge-green { background: rgba(34,197,94,0.3); color: #86efac; }
+        .badge-red { background: rgba(239,68,68,0.3); color: #fca5a5; }
+        .btn { 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin: 5px;
+            font-size: 14px;
+        }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-success { background: #22c55e; color: white; }
+        .btn-danger { background: #ef4444; color: white; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0; }
+        .stat { padding: 20px; border-radius: 12px; color: white; }
+        .stat-label { font-size: 12px; opacity: 0.9; margin-bottom: 8px; }
+        .stat-value { font-size: 24px; font-weight: bold; }
+        .bg-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .bg-purple { background: linear-gradient(135deg, #a855f7, #7e22ce); }
+        .bg-green { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .bg-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .bg-orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .log { 
+            font-family: monospace; 
+            font-size: 12px; 
+            padding: 8px; 
+            background: rgba(0,0,0,0.3); 
+            border-radius: 4px; 
+            margin: 4px 0;
+            color: #86efac;
+        }
+        .list { max-height: 300px; overflow-y: auto; }
+        .error { background: rgba(239,68,68,0.2); color: #fca5a5; }
+        .success { background: rgba(34,197,94,0.2); color: #86efac; }
+        select { 
+            width: 100%; 
+            padding: 12px; 
+            background: rgba(255,255,255,0.1); 
+            border: 1px solid rgba(255,255,255,0.2); 
+            border-radius: 8px; 
+            color: white; 
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        select option { background: #1e293b; }
     </style>
 </head>
 <body>
-    <div class="container" id="app"></div>
-    
+    <div class="container">
+        <div class="card">
+            <div class="title">🚀 한투 자동매매 Pro</div>
+            <div>
+                <span class="badge" id="statusBadge">⏳ 연결 중...</span>
+                <span class="badge badge-red" id="marketStatus">🔴 장 마감</span>
+                <span class="badge" id="autoMode">🤖 자동모드</span>
+            </div>
+            <div style="margin-top: 15px;">
+                <button class="btn btn-primary" onclick="connectAPI()">🔄 API 연결</button>
+                <button class="btn btn-success" onclick="startTrading()" id="startBtn" disabled>▶ 시작</button>
+                <button class="btn btn-danger" onclick="stopTrading()" id="stopBtn" disabled>⏸ 정지</button>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="stat bg-blue">
+                <div class="stat-label">💵 예수금</div>
+                <div class="stat-value" id="balance">0원</div>
+            </div>
+            <div class="stat bg-purple">
+                <div class="stat-label">📊 총 평가액</div>
+                <div class="stat-value" id="totalAssets">0원</div>
+            </div>
+            <div class="stat bg-green" id="profitCard">
+                <div class="stat-label">💰 평가손익</div>
+                <div class="stat-value" id="profitLoss">0원</div>
+            </div>
+            <div class="stat bg-orange">
+                <div class="stat-label">📈 거래 횟수</div>
+                <div class="stat-value" id="tradeCount">0회</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 15px;">⚙️ 매매 설정</h3>
+            <label style="display: block; margin-bottom: 5px; font-size: 14px;">종목 선택</label>
+            <select id="stockSelect">
+                <option value="005930">삼성전자</option>
+                <option value="000660">SK하이닉스</option>
+                <option value="035420">NAVER</option>
+                <option value="035720">카카오</option>
+                <option value="005380">현대차</option>
+            </select>
+            <div class="grid" style="grid-template-columns: 1fr 1fr;">
+                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                    <div style="font-size: 12px; opacity: 0.8;">현재가</div>
+                    <div style="font-size: 18px; font-weight: bold;" id="currentPrice">-원</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                    <div style="font-size: 12px; opacity: 0.8;">RSI</div>
+                    <div style="font-size: 18px; font-weight: bold;" id="rsiValue">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 15px;">📋 시스템 로그</h3>
+            <div class="list" id="logContainer">
+                <div class="log">✨ 시스템 시작...</div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const API_CONFIG = {
-            appKey: 'PSOTAikdVNzI3lS5YYqTZwpmQl92aeX6A8MB',
-            appSecret: 'c8PTo1EYnN82G4eYhL4yOsU/zkiqW4IKGq4s0CE9jd6FsaTH8NJvUbfKtwAdQ6+g+n3qCKWJlKu2qK8wasa/wwyRAT3Sx3bXdh1fSUdLCSyg+2LCVymXk08uzTg/QQ4ErP5BAWjeIWcC1f2fg1tIHV/Kpx1NHzm6tzLNVIMJccK+3RBjYws=',
-            accountNo: '50160165',
-            baseUrl: 'https://openapi.koreainvestment.com:9443'
-        };
-        
-        const STOCKS = [
-            { code: '005930', name: '삼성전자' },
-            { code: '000660', name: 'SK하이닉스' },
-            { code: '035420', name: 'NAVER' },
-            { code: '035720', name: '카카오' },
-            { code: '005380', name: '현대차' }
-        ];
-        
         let state = {
-            accessToken: '',
-            isConnected: false,
-            isRunning: false,
+            token: '',
+            connected: false,
+            running: false,
             autoMode: true,
             selectedStock: '005930',
-            accountInfo: { balance: 0, totalAssets: 0, profitLoss: 0, profitRate: 0 },
-            holdings: [],
-            currentPrice: 0,
-            rsi: 50,
-            trades: [],
-            logs: [],
-            marketStatus: 'closed',
-            notifications: []
+            balance: 0,
+            totalAssets: 0,
+            profitLoss: 0,
+            tradeCount: 0
         };
-        
+
         function addLog(msg, type = 'info') {
-            const log = { id: Date.now(), msg, time: new Date().toLocaleTimeString(), type };
-            state.logs = [log, ...state.logs].slice(0, 100);
-            if (type === 'success' || type === 'trade') {
-                addNotification(msg);
-            }
-            render();
-        }
-        
-        function addNotification(msg) {
-            const id = Date.now();
-            state.notifications = [{ id, msg }, ...state.notifications];
+            const logDiv = document.getElementById('logContainer');
+            const log = document.createElement('div');
+            log.className = 'log ' + (type === 'error' ? 'error' : type === 'success' ? 'success' : '');
+            log.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logDiv.insertBefore(log, logDiv.firstChild);
             
-            if ('Notification' in window && Notification.permission === 'granted') {
-                new Notification('한투 자동매매', { 
-                    body: msg,
-                    icon: 'icon.png',
-                    badge: 'icon.png'
+            while (logDiv.children.length > 50) {
+                logDiv.removeChild(logDiv.lastChild);
+            }
+        }
+
+        async function connectAPI() {
+            try {
+                addLog('🔐 API 토큰 발급 중...');
+                
+                const response = await fetch('/api/token', {
+                    method: 'POST'
                 });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    state.token = data.token;
+                    state.connected = true;
+                    
+                    document.getElementById('statusBadge').className = 'badge badge-green';
+                    document.getElementById('statusBadge').textContent = '✓ 연결됨';
+                    document.getElementById('startBtn').disabled = false;
+                    
+                    addLog('✅ API 연결 성공!', 'success');
+                    await getAccount();
+                } else {
+                    throw new Error(data.error || '토큰 발급 실패');
+                }
+            } catch (error) {
+                addLog('❌ API 연결 실패: ' + error.message, 'error');
+                state.connected = false;
+                document.getElementById('statusBadge').className = 'badge badge-red';
+                document.getElementById('statusBadge').textContent = '✗ 연결 실패';
+            }
+        }
+
+        async function getAccount() {
+            try {
+                addLog('💰 계좌 정보 조회 중...');
+                
+                const response = await fetch('/api/account', {
+                    headers: {
+                        'Authorization': `Bearer ${state.token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    state.balance = data.balance;
+                    state.totalAssets = data.totalAssets;
+                    state.profitLoss = data.profitLoss;
+
+                    document.getElementById('balance').textContent = state.balance.toLocaleString() + '원';
+                    document.getElementById('totalAssets').textContent = state.totalAssets.toLocaleString() + '원';
+                    document.getElementById('profitLoss').textContent = (state.profitLoss >= 0 ? '+' : '') + state.profitLoss.toLocaleString() + '원';
+                    
+                    const profitCard = document.getElementById('profitCard');
+                    profitCard.className = 'stat ' + (state.profitLoss >= 0 ? 'bg-green' : 'bg-red');
+
+                    addLog(`✅ 계좌 조회 성공 - 예수금: ${state.balance.toLocaleString()}원`, 'success');
+                } else {
+                    throw new Error(data.error || '계좌 조회 실패');
+                }
+            } catch (error) {
+                addLog('❌ 계좌 조회 실패: ' + error.message, 'error');
+            }
+        }
+
+        async function getPrice() {
+            try {
+                const response = await fetch(`/api/price?code=${state.selectedStock}`, {
+                    headers: {
+                        'Authorization': `Bearer ${state.token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('currentPrice').textContent = data.price.toLocaleString() + '원';
+                    document.getElementById('rsiValue').textContent = data.rsi || '-';
+                }
+            } catch (error) {
+                console.error('가격 조회 오류:', error);
+            }
+        }
+
+        function startTrading() {
+            if (!state.connected) {
+                addLog('⚠️ API가 연결되지 않았습니다.', 'error');
+                return;
             }
             
-            setTimeout(() => {
-                state.notifications = state.notifications.filter(n => n.id !== id);
-                render();
+            state.running = true;
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            addLog('🚀 자동매매 시작!', 'success');
+            
+            setInterval(() => {
+                if (state.running && state.connected) {
+                    getPrice();
+                }
             }, 5000);
-            render();
         }
-        
-        function isMarketOpen() {
+
+        function stopTrading() {
+            state.running = false;
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            addLog('⏸️ 자동매매 중지', 'success');
+        }
+
+        function checkMarketStatus() {
             const now = new Date();
             const day = now.getDay();
             const hour = now.getHours();
             const minute = now.getMinutes();
             const time = hour * 100 + minute;
-            
+
+            const statusBadge = document.getElementById('marketStatus');
+
             if (day === 0 || day === 6) {
-                state.marketStatus = 'weekend';
-                return false;
-            }
-            if (time >= 900 && time < 1530) {
-                state.marketStatus = 'open';
-                return true;
-            } else if (time >= 855 && time < 900) {
-                state.marketStatus = 'pre-market';
-                return false;
-            }
-            state.marketStatus = 'closed';
-            return false;
-        }
-        
-        function getMarketStatusText() {
-            const statusMap = {
-                'open': '🟢 장 중',
-                'pre-market': '🟡 장 시작 전',
-                'weekend': '🔴 주말',
-                'closed': '🔴 장 마감'
-            };
-            return statusMap[state.marketStatus] || '🔴 장 마감';
-        }
-        
-        async function getToken() {
-            try {
-                addLog('🔐 API 연결 중...');
-                const res = await fetch(`${API_CONFIG.baseUrl}/oauth2/tokenP`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        grant_type: 'client_credentials',
-                        appkey: API_CONFIG.appKey,
-                        appsecret: API_CONFIG.appSecret
-                    })
-                });
-                const data = await res.json();
-                if (data.access_token) {
-                    state.accessToken = data.access_token;
-                    state.isConnected = true;
-                    addLog('✅ API 연결 성공!', 'success');
-                    await getAccount();
-                } else {
-                    addLog('❌ API 연결 실패: ' + (data.msg || '알 수 없는 오류'), 'error');
-                    state.isConnected = false;
-                }
-            } catch (e) {
-                addLog('❌ 연결 오류: ' + e.message, 'error');
-                state.isConnected = false;
-            }
-            render();
-        }
-        
-        async function getAccount() {
-            try {
-                const params = new URLSearchParams({
-                    CANO: API_CONFIG.accountNo.substring(0, 8),
-                    ACNT_PRDT_CD: API_CONFIG.accountNo.substring(8),
-                    AFHR_FLPR_YN: 'N', OFL_YN: '', INQR_DVSN: '02', UNPR_DVSN: '01',
-                    FUND_STTL_ICLD_YN: 'N', FNCG_AMT_AUTO_RDPT_YN: 'N', PRCS_DVSN: '01',
-                    CTX_AREA_FK100: '', CTX_AREA_NK100: ''
-                });
-                const res = await fetch(`${API_CONFIG.baseUrl}/uapi/domestic-stock/v1/trading/inquire-balance?${params}`, {
-                    headers: {
-                        'authorization': `Bearer ${state.accessToken}`,
-                        'appkey': API_CONFIG.appKey,
-                        'appsecret': API_CONFIG.appSecret,
-                        'tr_id': 'VTTC8434R'
-                    }
-                });
-                const data = await res.json();
-                if (data.rt_cd === '0') {
-                    const o = data.output2[0];
-                    state.accountInfo = {
-                        balance: parseInt(o.prvs_rcdl_excc_amt || 0),
-                        totalAssets: parseInt(o.tot_evlu_amt || 0),
-                        profitLoss: parseInt(o.evlu_pfls_smtl_amt || 0),
-                        profitRate: parseFloat(o.tot_evlu_pfls_rt || 0)
-                    };
-                    state.holdings = data.output1?.filter(x => parseInt(x.hldg_qty) > 0) || [];
-                    addLog('✅ 계좌 조회 완료');
-                } else {
-                    addLog('⚠️ 계좌 조회 실패: ' + data.msg1, 'error');
-                }
-            } catch (e) {
-                addLog('❌ 계좌 조회 오류: ' + e.message, 'error');
-            }
-            render();
-        }
-        
-        async function getPrice() {
-            try {
-                const params = new URLSearchParams({
-                    FID_COND_MRKT_DIV_CODE: 'J',
-                    FID_INPUT_ISCD: state.selectedStock
-                });
-                const res = await fetch(`${API_CONFIG.baseUrl}/uapi/domestic-stock/v1/quotations/inquire-price?${params}`, {
-                    headers: {
-                        'authorization': `Bearer ${state.accessToken}`,
-                        'appkey': API_CONFIG.appKey,
-                        'appsecret': API_CONFIG.appSecret,
-                        'tr_id': 'FHKST01010100'
-                    }
-                });
-                const data = await res.json();
-                if (data.rt_cd === '0') {
-                    state.currentPrice = parseInt(data.output.stck_prpr);
-                    state.rsi = Math.floor(Math.random() * 100);
-                    render();
-                    return state.currentPrice;
-                }
-            } catch (e) {
-                addLog('❌ 시세 조회 오류', 'error');
-            }
-            return 0;
-        }
-        
-        async function buyOrder(price) {
-            try {
-                const stockName = STOCKS.find(s => s.code === state.selectedStock)?.name;
-                addLog(`📊 매수 주문: ${stockName}`, 'trade');
-                const res = await fetch(`${API_CONFIG.baseUrl}/uapi/domestic-stock/v1/trading/order-cash`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'authorization': `Bearer ${state.accessToken}`,
-                        'appkey': API_CONFIG.appKey,
-                        'appsecret': API_CONFIG.appSecret,
-                        'tr_id': 'VTTC0802U'
-                    },
-                    body: JSON.stringify({
-                        CANO: API_CONFIG.accountNo.substring(0, 8),
-                        ACNT_PRDT_CD: API_CONFIG.accountNo.substring(8),
-                        PDNO: state.selectedStock,
-                        ORD_DVSN: '01',
-                        ORD_QTY: '1',
-                        ORD_UNPR: '0'
-                    })
-                });
-                const data = await res.json();
-                if (data.rt_cd === '0') {
-                    addLog(`✅ 매수 체결! ${price.toLocaleString()}원`, 'success');
-                    state.trades = [{
-                        id: Date.now(),
-                        type: '매수',
-                        stock: stockName,
-                        price,
-                        time: new Date().toLocaleTimeString()
-                    }, ...state.trades].slice(0, 50);
-                    setTimeout(() => getAccount(), 1000);
-                } else {
-                    addLog(`❌ 매수 실패: ${data.msg1}`, 'error');
-                }
-            } catch (e) {
-                addLog('❌ 주문 오류: ' + e.message, 'error');
+                statusBadge.className = 'badge badge-red';
+                statusBadge.textContent = '🔴 주말';
+            } else if (time >= 900 && time < 1530) {
+                statusBadge.className = 'badge badge-green';
+                statusBadge.textContent = '🟢 장 중';
+            } else {
+                statusBadge.className = 'badge badge-red';
+                statusBadge.textContent = '🔴 장 마감';
             }
         }
-        
-        function render() {
-            const app = document.getElementById('app');
-            app.innerHTML = `
-                ${state.notifications.map(n => `<div class="notification">${n.msg}</div>`).join('')}
-                
-                <div class="card">
-                    <div class="header">
-                        <div>
-                            <div class="title">🚀 한투 자동매매</div>
-                            <div class="subtitle">${new Date().toLocaleString('ko-KR')} · ${API_CONFIG.accountNo}</div>
-                        </div>
-                        <div class="controls">
-                            <span class="badge ${state.isConnected ? 'badge-green' : 'badge-red'}">
-                                ${state.isConnected ? '✓ 연결' : '✗ 끊김'}
-                            </span>
-                            <span class="badge badge-purple">${getMarketStatusText()}</span>
-                            <button class="btn ${state.autoMode ? 'btn-primary' : 'btn-gray'}" onclick="toggleAutoMode()">
-                                ${state.autoMode ? '🤖 자동' : '👤 수동'}
-                            </button>
-                            <button class="btn ${!state.isConnected || !isMarketOpen() ? 'btn-gray' : state.isRunning ? 'btn-danger' : 'btn-success'}" 
-                                    onclick="toggleRunning()" 
-                                    ${!state.isConnected || !isMarketOpen() ? 'disabled' : ''}>
-                                ${state.isRunning ? '⏸ 정지' : '▶ 시작'}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="grid-2">
-                    <div class="stat-card bg-blue">
-                        <div class="stat-label">예수금</div>
-                        <div class="stat-value">${state.accountInfo.balance.toLocaleString()}원</div>
-                    </div>
-                    <div class="stat-card bg-purple">
-                        <div class="stat-label">총 평가액</div>
-                        <div class="stat-value">${state.accountInfo.totalAssets.toLocaleString()}원</div>
-                    </div>
-                    <div class="stat-card ${state.accountInfo.profitLoss >= 0 ? 'bg-green' : 'bg-red'}">
-                        <div class="stat-label">평가손익</div>
-                        <div class="stat-value">${state.accountInfo.profitLoss >= 0 ? '+' : ''}${state.accountInfo.profitLoss.toLocaleString()}원</div>
-                        <div class="stat-sub">${state.accountInfo.profitRate.toFixed(2)}%</div>
-                    </div>
-                    <div class="stat-card bg-orange">
-                        <div class="stat-label">거래 횟수</div>
-                        <div class="stat-value">${state.trades.length}회</div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h3 style="margin-bottom: 12px; font-weight: bold; font-size: 16px;">매매 설정</h3>
-                    <div style="margin-bottom: 12px;">
-                        <label style="display: block; font-size: 12px; color: rgba(147,197,253,1); margin-bottom: 4px;">종목</label>
-                        <select onchange="state.selectedStock = this.value; render();">
-                            ${STOCKS.map(s => `<option value="${s.code}" ${s.code === state.selectedStock ? 'selected' : ''}>${s.name}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="grid-2">
-                        <div style="padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                            <div style="font-size: 12px; color: rgba(147,197,253,1);">현재가</div>
-                            <div style="font-weight: bold; margin-top: 4px; font-size: 16px;">${state.currentPrice.toLocaleString()}원</div>
-                        </div>
-                        <div style="padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                            <div style="font-size: 12px; color: rgba(147,197,253,1);">RSI</div>
-                            <div style="font-weight: bold; margin-top: 4px; font-size: 16px; color: ${state.rsi < 30 ? 'rgb(134,239,172)' : state.rsi > 70 ? 'rgb(252,165,165)' : 'white'};">
-                                ${state.rsi}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h3 style="margin-bottom: 12px; font-weight: bold; font-size: 16px;">보유 종목</h3>
-                    <div class="list">
-                        ${state.holdings.length > 0 ? state.holdings.map(h => `
-                            <div class="list-item">
-                                <div>
-                                    <div style="font-weight: bold;">${h.prdt_name}</div>
-                                    <div style="font-size: 11px; color: rgba(147,197,253,1); margin-top: 2px;">${h.hldg_qty}주</div>
-                                </div>
-                                <div style="text-align: right;">
-                                    <div style="font-weight: bold;">${parseInt(h.evlu_amt).toLocaleString()}원</div>
-                                    <div style="font-size: 11px; margin-top: 2px; color: ${parseFloat(h.evlu_pfls_rt) >= 0 ? 'rgb(134,239,172)' : 'rgb(252,165,165)'};">
-                                        ${parseFloat(h.evlu_pfls_rt) >= 0 ? '+' : ''}${parseFloat(h.evlu_pfls_rt).toFixed(2)}%
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('') : '<div class="empty-state">보유 종목 없음</div>'}
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h3 style="margin-bottom: 12px; font-weight: bold; font-size: 16px;">거래 내역</h3>
-                    <div class="list">
-                        ${state.trades.length > 0 ? state.trades.map(t => `
-                            <div class="list-item">
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span class="${t.type === '매수' ? 'badge-red' : 'badge-blue'}" style="padding: 4px 8px; border-radius: 4px; font-size: 10px; white-space: nowrap;">
-                                        ${t.type}
-                                    </span>
-                                    <div>
-                                        <div style="font-weight: bold; font-size: 13px;">${t.stock}</div>
-                                        <div style="font-size: 10px; color: rgba(147,197,253,1); margin-top: 2px;">${t.time}</div>
-                                    </div>
-                                </div>
-                                <div style="text-align: right; font-weight: bold; white-space: nowrap; font-size: 13px;">${t.price.toLocaleString()}원</div>
-                            </div>
-                        `).join('') : '<div class="empty-state">거래 내역 없음</div>'}
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div style="display: flex; justify-between; align-items: center; margin-bottom: 12px;">
-                        <h3 style="font-weight: bold; font-size: 16px;">시스템 로그</h3>
-                        <button class="btn" style="padding: 6px 12px; font-size: 11px; background: rgba(239,68,68,0.2); color: rgb(252,165,165);" onclick="state.logs = []; render();">
-                            지우기
-                        </button>
-                    </div>
-                    <div class="list">
-                        ${state.logs.map(log => `
-                            <div class="log log-${log.type}">
-                                <span style="color: rgba(147,197,253,1);">[${log.time}]</span> ${log.msg}
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                
-                <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5); font-size: 12px;">
-                    📱 아이폰에서 "홈 화면에 추가"로 앱처럼 사용하세요!<br>
-                    <span style="font-size: 10px; opacity: 0.7;">GitHub Pages로 호스팅됨</span>
-                </div>
-            `;
-        }
-        
-        function toggleAutoMode() {
-            state.autoMode = !state.autoMode;
-            addLog(state.autoMode ? '🤖 자동 모드 켜짐' : '👤 수동 모드로 전환');
-            render();
-        }
-        
-        function toggleRunning() {
-            if (state.isConnected && isMarketOpen()) {
-                state.isRunning = !state.isRunning;
-                addLog(state.isRunning ? '🚀 매매 시작!' : '⏸ 매매 중지', 'info');
-                render();
-            }
-        }
-        
-        // 초기화
-        getToken();
-        
-        // 알림 권한 요청
-        if ('Notification' in window && Notification.permission === 'default') {
-            Notification.requestPermission();
-        }
-        
-        // Service Worker 등록
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(() => {});
-        }
-        
-        // 시간 업데이트 및 자동 시작
-        setInterval(() => {
-            isMarketOpen();
-            if (state.autoMode) {
-                const now = new Date();
-                const h = now.getHours(), m = now.getMinutes();
-                
-                if (h === 8 && m === 55 && !state.isConnected) {
-                    addLog('🌅 장 시작 준비 중...');
-                    getToken();
-                }
-                
-                if (h === 9 && m === 0 && state.isConnected && !state.isRunning && isMarketOpen()) {
-                    state.isRunning = true;
-                    addLog('🚀 자동 매매 시작!', 'success');
-                }
-                
-                if (h === 15 && m === 30 && state.isRunning) {
-                    state.isRunning = false;
-                    addLog('🛑 장 마감 - 자동 종료', 'info');
-                }
-            }
-            render();
-        }, 1000);
-        
-        // 자동매매 로직
-        setInterval(async () => {
-            if (state.isRunning && state.isConnected && isMarketOpen()) {
-                const price = await getPrice();
-                if (price && state.rsi < 30 && state.accountInfo.balance >= price) {
-                    addLog(`🎯 RSI 매수 신호 감지! (RSI: ${state.rsi})`, 'trade');
-                    await buyOrder(price);
-                }
-            }
-        }, 10000);
-        
-        render();
+
+        document.getElementById('stockSelect').addEventListener('change', (e) => {
+            state.selectedStock = e.target.value;
+            if (state.connected) getPrice();
+        });
+
+        setInterval(checkMarketStatus, 1000);
+
+        window.addEventListener('load', () => {
+            addLog('✨ 시스템 초기화 완료');
+            addLog('💡 "API 연결" 버튼을 눌러 시작하세요.');
+            checkMarketStatus();
+            
+            setTimeout(() => {
+                connectAPI();
+            }, 2000);
+        });
     </script>
 </body>
 </html>
